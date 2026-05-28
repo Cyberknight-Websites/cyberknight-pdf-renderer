@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>{{ title }}</title>
+<style>
+/* =========================================================================
+   Rosé Pine Dawn + JetBrains Mono PDF stylesheet
+   ========================================================================= */
+
+/* ── Font ─────────────────────────────────────────────────────────────── */
+
+@font-face {
+    font-family: "JetBrains Mono";
+    src: url("{{ fonts_dir }}/JetBrainsMono-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+}
+@font-face {
+    font-family: "JetBrains Mono";
+    src: url("{{ fonts_dir }}/JetBrainsMono-Bold.ttf") format("truetype");
+    font-weight: 700;
+    font-style: normal;
+}
+@font-face {
+    font-family: "JetBrains Mono";
+    src: url("{{ fonts_dir }}/JetBrainsMono-Italic.ttf") format("truetype");
+    font-weight: 400;
+    font-style: italic;
+}
+@font-face {
+    font-family: "JetBrains Mono";
+    src: url("{{ fonts_dir }}/JetBrainsMono-BoldItalic.ttf") format("truetype");
+    font-weight: 700;
+    font-style: italic;
+}
+
+/* ── Root & variables ─────────────────────────────────────────────────── */
+
+{{ css_variables }}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10pt;
+    line-height: 1.6;
+    color: var(--text);
+}
+
+/* ── Page layout ──────────────────────────────────────────────────────── */
+
+@page {
+    size: letter;
+    margin: 0.75in 0.75in 0.75in 0.75in;
+    background: var(--base);
+
+    /* Iris header bar on every content page */
+    @top-left {
+        content: string(section-title);
+        font-family: "JetBrains Mono", monospace;
+        font-weight: 700;
+        font-size: 20pt;
+        color: var(--header-text);
+        background: var(--header-bg);
+        width: 100%;
+        margin: 0 -0.75in 0 -0.75in;
+        padding: 6pt 0.75in;
+    }
+
+    @bottom-center {
+        content: counter(page);
+        font-family: "JetBrains Mono", monospace;
+        font-size: 12pt;
+        color: var(--subtle);
+    }
+}
+
+/* Title page: no header bar, no page number */
+@page title-page {
+    background: var(--base);
+    @top-left { content: none; }
+    @bottom-center { content: none; }
+}
+
+/* Content page (default for body) */
+@page content {
+    background: var(--base);
+}
+
+/* ── Title page ───────────────────────────────────────────────────────── */
+
+.title-page {
+    page: title-page;
+    page-break-after: always;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100%;
+    text-align: center;
+}
+
+.title-page .brand {
+    font-size: 11pt;
+    color: var(--iris);
+    margin-bottom: 16pt;
+    text-transform: uppercase;
+    letter-spacing: 2pt;
+}
+
+.title-page h1 {
+    font-size: 28pt;
+    font-weight: 700;
+    color: var(--pine);
+    margin-bottom: 8pt;
+    line-height: 1.2;
+    max-width: 90%;
+}
+
+.title-page .subtitle {
+    font-size: 16pt;
+    color: var(--muted);
+    line-height: 1.5;
+}
+
+.title-page .date {
+    font-size: 16pt;
+    color: var(--subtle);
+    margin-top: 12pt;
+}
+
+/* ── Section pages ────────────────────────────────────────────────────── */
+
+.section-page {
+    page-break-before: always;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.section-end {
+    height: 1pt;
+    width: 1pt;
+    margin: 0;
+    padding: 0;
+    border: none;
+    visibility: hidden;
+    overflow: hidden;
+}
+
+h2 {
+    position: absolute;
+    string-set: section-title content();
+    font-size: 0;
+    line-height: 0;
+    border: none;
+    margin: 0;
+    padding: 0;
+}
+
+h3 {
+    font-size: 12pt;
+    font-weight: 700;
+    color: var(--pine);
+    margin: 0 0 6pt 0;
+    line-height: 1.4;
+    page-break-after: avoid;
+}
+
+/* ── Surface boxes ────────────────────────────────────────────────────── */
+
+.surface {
+    background: var(--surface);
+    border: 0.5pt solid var(--hl-high);
+    border-radius: 8pt;
+    padding: 16pt;
+    margin: 9pt 0;
+}
+
+.surface p {
+    margin-bottom: 6pt;
+}
+
+/* ── Code blocks ──────────────────────────────────────────────────────── */
+
+pre {
+    background: var(--overlay);
+    border-radius: 6pt;
+    padding: 8pt 10pt;
+    margin: 6pt 0;
+    font-size: 8.5pt;
+    line-height: 1.45;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+pre .surface:last-child {
+    margin-bottom: 0;
+}
+
+code {
+    font-family: "JetBrains Mono", monospace;
+    background: var(--overlay);
+    padding: 1pt 4pt;
+    border-radius: 3pt;
+    font-size: 9pt;
+}
+
+pre code {
+    background: none;
+    padding: 0;
+    border-radius: 0;
+    font-size: inherit;
+}
+
+/* ── Tables ───────────────────────────────────────────────────────────── */
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 8pt 0;
+    font-size: 9pt;
+}
+
+th {
+    background: var(--hl-med);
+    color: var(--text);
+    font-weight: 700;
+    text-align: left;
+    padding: 6pt 8pt;
+    border-bottom: 1pt solid var(--hl-high);
+}
+
+td {
+    padding: 6pt 8pt;
+    border-bottom: 0.5pt solid var(--hl-high);
+}
+
+tr:nth-child(even) td {
+    background: var(--hl-low);
+}
+
+tr:nth-child(odd) td {
+    background: var(--surface);
+}
+
+/* ── Images ───────────────────────────────────────────────────────────── */
+
+img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4pt;
+    margin: 8pt 0;
+    display: block;
+}
+
+/* ── Lists ────────────────────────────────────────────────────────────── */
+
+ul, ol {
+    padding-left: 18pt;
+    margin: 4pt 0 8pt 0;
+}
+
+li {
+    margin-bottom: 2pt;
+    line-height: 1.5;
+}
+
+ul li::marker {
+    color: var(--rose);
+}
+
+/* ── TOC box (title page) ─────────────────────────────────────────────── */
+
+.toc-wrapper {
+    width: 100%;
+    text-align: center;
+    margin-top: 28pt;
+}
+
+.toc-box {
+    display: inline-block;
+    background: var(--surface);
+    border: 0.5pt solid var(--hl-high);
+    border-radius: 8pt;
+    padding: 14pt 18pt;
+    margin-top: 0;
+    text-align: left;
+    min-width: 55%;
+    max-width: 78%;
+}
+
+.toc-box-header {
+    font-size: 8pt;
+    font-weight: 700;
+    color: var(--iris);
+    text-transform: uppercase;
+    letter-spacing: 2pt;
+    margin-bottom: 10pt;
+    text-align: center;
+}
+
+.toc-entry {
+    display: flex;
+    align-items: baseline;
+    margin-bottom: 5pt;
+    font-size: 9.5pt;
+    color: var(--text);
+}
+
+.toc-entry .toc-label {
+    white-space: nowrap;
+    color: var(--text);
+}
+
+.toc-entry .toc-spacer {
+    flex: 1;
+    min-width: 10pt;
+    border-bottom: 0.5pt dotted var(--hl-high);
+    margin: 0 6pt 2pt 6pt;
+}
+
+.toc-entry .toc-page {
+    white-space: nowrap;
+    color: var(--subtle);
+    text-decoration: none;
+}
+
+.toc-entry .toc-page::after {
+    content: target-counter(attr(href url), page);
+}
+
+/* ── Miscellaneous ────────────────────────────────────────────────────── */
+
+hr {
+    border: none;
+    border-top: 0.5pt solid var(--hl-high);
+    margin: 12pt 0;
+    text-align: center;
+}
+
+strong {
+    font-weight: 700;
+    color: var(--text);
+}
+
+a {
+    color: var(--iris);
+}
+
+/* Print-oriented fixes */
+html, body {
+    height: 100%;
+    background: var(--base);
+}
+
+/* ── Strong in code should stay monospace ─────────────────────────────── */
+pre strong {
+    font-weight: 700;
+}
+</style>
+</head>
+<body>
+
+<!-- Title Page -->
+<div class="title-page">
+    <p class="brand">Cyberknight Websites</p>
+    <h1>{{ title }}</h1>
+    {% if subtitle %}
+    <p class="subtitle">{{ subtitle }}</p>
+    {% endif %}
+    <p class="date">{{ date }}</p>
+    {% if sections %}
+    <div class="toc-wrapper">
+        <div class="toc-box">
+            <p class="toc-box-header">Contents</p>
+            {% for section in sections %}
+            <div class="toc-entry">
+                <span class="toc-label">{{ section.title }}</span>
+                <span class="toc-spacer"></span>
+                <a class="toc-page" href="#{{ section.id }}"></a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Body -->
+{% for section in sections %}
+<div class="section-page" id="{{ section.id }}">
+    <h2>{{ section.title }}</h2>
+    {{ section.body_html }}
+    <div class="section-end" id="end-{{ section.id }}"></div>
+</div>
+{% endfor %}
+
+</body>
+</html>
