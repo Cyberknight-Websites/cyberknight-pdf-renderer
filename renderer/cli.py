@@ -165,7 +165,7 @@ def main() -> None:
         )
 
         print(f"📦 Building PDF ({theme_name}): {output_path}")
-        doc = HTML(string=html).render()
+        doc = HTML(string=html, base_url=str(md_path.parent)).render()
         overflowing = _validate_sections(doc, data.sections)
         if overflowing:
             print(

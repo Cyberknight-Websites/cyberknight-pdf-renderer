@@ -239,7 +239,7 @@ class _SectionHTMLRenderer:
                 inner = self._render_inlines(child.get("children", []))
                 parts.append(f'<a href="{href}">{inner}</a>')
             elif t == "image":
-                src = child.get("attrs", {}).get("src", "")
+                src = child.get("attrs", {}).get("url", "")
                 alt = _escape_html(child.get("attrs", {}).get("alt", ""))
                 if not src.startswith(("http://", "https://", "/")):
                     src = str(self.md_dir / src)
