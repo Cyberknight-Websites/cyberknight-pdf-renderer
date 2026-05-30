@@ -341,6 +341,10 @@ def convert(md_path: Path) -> ReportData:
         ReportData with title, subtitle, TOC entries, and sections.
     """
     text = md_path.read_text(encoding="utf-8")
+
+    # Strip YAML frontmatter
+    text = re.sub(r'^---\s*\n.*?\n---\s*\n', '', text, count=1, flags=re.DOTALL)
+
     markdown = mistune.create_markdown(renderer="ast", plugins=["table"])
     ast: list[dict[str, Any]] = markdown(text)  # type: ignore[assignment]
 
