@@ -35,6 +35,25 @@
     font-style: italic;
 }
 
+@font-face {
+    font-family: "Outfit";
+    src: url("{{ fonts_dir }}/Outfit-Light.ttf") format("truetype");
+    font-weight: 300;
+    font-style: normal;
+}
+@font-face {
+    font-family: "Outfit";
+    src: url("{{ fonts_dir }}/Outfit-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+}
+@font-face {
+    font-family: "Outfit";
+    src: url("{{ fonts_dir }}/Outfit-Bold.ttf") format("truetype");
+    font-weight: 700;
+    font-style: normal;
+}
+
 /* ── Root & variables ─────────────────────────────────────────────────── */
 
 {{ css_variables }}
@@ -42,7 +61,7 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 html {
-    font-family: "JetBrains Mono", monospace;
+    font-family: "Outfit", sans-serif;
     font-size: 10pt;
     line-height: 1.6;
     color: var(--text);
@@ -58,19 +77,19 @@ html {
     /* Iris header bar on every content page */
     @top-left {
         content: string(section-title);
-        font-family: "JetBrains Mono", monospace;
+        font-family: "Outfit", sans-serif;
         font-weight: 700;
         font-size: 20pt;
         color: var(--header-text);
         background: var(--header-bg);
         width: 100%;
-        margin: 0 -0.75in 0 -0.75in;
+        margin: 0 -0.75in 1rem -0.75in;
         padding: 6pt 0.75in;
     }
 
     @bottom-center {
         content: counter(page);
-        font-family: "JetBrains Mono", monospace;
+        font-family: "Outfit", sans-serif;
         font-size: 12pt;
         color: var(--subtle);
     }
@@ -102,6 +121,7 @@ html {
 }
 
 .title-page .brand {
+    font-family: "JetBrains Mono", monospace;
     font-size: 11pt;
     color: var(--iris);
     margin-bottom: 16pt;
@@ -125,6 +145,7 @@ html {
 }
 
 .title-page .date {
+    font-family: "JetBrains Mono", monospace;
     font-size: 16pt;
     color: var(--subtle);
     margin-top: 12pt;
@@ -185,6 +206,7 @@ h3 {
 /* ── Code blocks ──────────────────────────────────────────────────────── */
 
 pre {
+    font-family: "JetBrains Mono", monospace;
     background: var(--overlay);
     border-radius: 6pt;
     padding: 8pt 10pt;
@@ -319,6 +341,7 @@ ul li::marker {
     display: flex;
     align-items: baseline;
     margin-bottom: 5pt;
+    font-family: "JetBrains Mono", monospace;
     font-size: 9.5pt;
     color: var(--text);
 }

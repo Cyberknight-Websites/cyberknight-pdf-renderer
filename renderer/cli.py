@@ -17,6 +17,12 @@ import sys
 from datetime import date
 from pathlib import Path
 
+import base64
+import re
+from io import BytesIO
+
+from PIL import Image
+
 # macOS: WeasyPrint needs Homebrew's Pango/Cairo/GLib dynamic libraries.
 # Inject the Homebrew lib path before any imports so ctypes can find them.
 def _ensure_homebrew_libs() -> None:
@@ -81,6 +87,52 @@ def _validate_sections(document, sections):
         if culprit not in overflowing:
             overflowing.append(culprit)
     return overflowing
+
+
+def _grayscale_images_in_html(html: str, base_path: Path) -> str:
+    """Convert all <img> sources to grayscale base64 data URIs.
+
+    WeasyPrint does not support the CSS ``filter`` property, so we
+    pre-process images with Pillow when the printable theme is selected.
+    """
+
+    def _replace_src(match: re.Match) -> str:
+        full_tag = match.group(0)
+        src = match.group(1)
+
+        # Already a data URI — nothing to do
+        if src.startswith("data:"):
+            return full_tag
+
+        try:
+            if src.startswith(("http://", "https://")):
+                import urllib.request
+
+                with urllib.request.urlopen(src) as resp:
+                    img_data = resp.read()
+                img = Image.open(BytesIO(img_data))
+            else:
+                img_path = (base_path / src).resolve()
+                img = Image.open(img_path)
+
+            img_gray = img.convert("L")
+            buf = BytesIO()
+            img_gray.save(buf, format="PNG")
+            buf.seek(0)
+
+            b64 = base64.b64encode(buf.read()).decode("ascii")
+            data_uri = f"data:image/png;base64,{b64}"
+
+            return full_tag.replace(src, data_uri)
+        except Exception:
+            # If conversion fails, leave the original src untouched
+            return full_tag
+
+    return re.sub(
+        r'<img\s+[^>]*src="([^"]*)"',
+        _replace_src,
+        html,
+    )
 
 
 def main() -> None:
@@ -164,6 +216,10 @@ def main() -> None:
             css_variables=emit_css_variables(theme_name),
             theme_name=theme_name,
         )
+
+        # WeasyPrint doesn't support CSS filter; pre-process images for printable
+        if theme_name == "printable":
+            html = _grayscale_images_in_html(html, md_path.parent)
 
         print(f"📦 Building PDF ({theme_name}): {output_path}")
         doc = HTML(string=html, base_url=str(md_path.parent)).render()
