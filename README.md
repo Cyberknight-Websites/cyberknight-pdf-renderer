@@ -1,8 +1,8 @@
 # cyberknight-pdf-renderer
 
 Rosé Pine themed PDF report generator from Markdown. Produces print-ready,
-letter-size PDFs with JetBrains Mono typography. Supports dark (Moon), light
-(Dawn), and print-friendly (Mono) colour themes.
+letter-size PDFs with JetBrains Mono typography. Supports dark, light,
+and printable (greyscale) colour themes.
 
 ## Prerequisites
 
@@ -40,18 +40,18 @@ uv tool install --editable . --force
 ## Usage
 
 ```bash
-# Render a Markdown file with all three themes (moon, dawn, mono)
+# Render a Markdown file with all three themes (dark, light, printable)
 cyberknight-pdf-render path/to/report.md
 
 # Render with a single theme
-cyberknight-pdf-render --theme dawn path/to/report.md
+cyberknight-pdf-render --theme light path/to/report.md
 
 # Point at a directory containing a single .md file
 cyberknight-pdf-render archive/2026-q1-membership/
 ```
 
 PDFs are written alongside the source `.md` file with theme suffixes:
-`report-moon.pdf`, `report-dawn.pdf`, `report-mono.pdf`.
+`report-dark.pdf`, `report-light.pdf`, `report-printable.pdf`.
 
 ## Markdown features
 
@@ -66,9 +66,9 @@ PDFs are written alongside the source `.md` file with theme suffixes:
 
 | Theme | Use case |
 |-------|----------|
-| `moon` | Dark mode, presentations |
-| `dawn` | Light mode, screen reading |
-| `mono` | Print-friendly, black and white |
+| `dark` | Dark mode, presentations |
+| `light` | Light mode, screen reading |
+| `printable` | Print-friendly, greyscale |
 
 ## Development
 

@@ -3,11 +3,11 @@
 Usage:
     cyberknight-pdf-render path/to/report.md
     cyberknight-pdf-render archive/2026-q1-membership/
-    cyberknight-pdf-render --theme moon path/to/report.md   # single theme only
+    cyberknight-pdf-render --theme dark path/to/report.md   # single theme only
 
-By default, renders all three themes (moon, dawn, mono) producing
-three PDFs with theme suffixes (e.g. report-moon.pdf, report-dawn.pdf,
-report-mono.pdf). Pass --theme to render a single theme.
+By default, renders all three themes (dark, light, printable) producing
+three PDFs with theme suffixes (e.g. report-dark.pdf, report-light.pdf,
+report-printable.pdf). Pass --theme to render a single theme.
 """
 
 from __future__ import annotations
@@ -90,7 +90,7 @@ def main() -> None:
 
     if args and args[0] == "--theme":
         if len(args) < 2:
-            print("Error: --theme requires a value (moon, dawn, or mono)", file=sys.stderr)
+            print("Error: --theme requires a value (dark, light, or printable)", file=sys.stderr)
             sys.exit(1)
         theme = args[1]
         if theme not in THEMES:
@@ -104,7 +104,7 @@ def main() -> None:
 
     if not args:
         print(
-            "Usage: cyberknight-pdf-render [--theme moon|dawn|mono]"
+            "Usage: cyberknight-pdf-render [--theme dark|light|printable]"
             " <path/to/report.md | path/to/report-folder/>",
             file=sys.stderr,
         )
@@ -162,6 +162,7 @@ def main() -> None:
             sections=data.sections,
             fonts_dir=str(fonts_dir),
             css_variables=emit_css_variables(theme_name),
+            theme_name=theme_name,
         )
 
         print(f"📦 Building PDF ({theme_name}): {output_path}")

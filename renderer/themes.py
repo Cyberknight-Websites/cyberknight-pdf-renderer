@@ -7,9 +7,9 @@ CSS block that the Jinja2 template injects into the stylesheet.
 
 from __future__ import annotations
 
-# ── Rosé Pine Moon (dark) ────────────────────────────────────────────────
+# ── Dark ─────────────────────────────────────────────────────────────────
 
-MOON: dict[str, str] = {
+DARK: dict[str, str] = {
     "base":     "#232136",
     "surface":  "#2a273f",
     "overlay":  "#393552",
@@ -29,9 +29,9 @@ MOON: dict[str, str] = {
     "header_text": "#ffffff",
 }
 
-# ── Rosé Pine Dawn (light) ──────────────────────────────────────────────
+# ── Light ───────────────────────────────────────────────────────────────
 
-DAWN: dict[str, str] = {
+LIGHT: dict[str, str] = {
     "base":     "#faf4ed",
     "surface":  "#fffaf3",
     "overlay":  "#f2e9e1",
@@ -51,9 +51,9 @@ DAWN: dict[str, str] = {
     "header_text": "#ffffff",
 }
 
-# ── Monochrome (print-friendly) ─────────────────────────────────────────
+# ── Printable (greyscale, print-friendly) ───────────────────────────────
 
-MONO: dict[str, str] = {
+PRINTABLE: dict[str, str] = {
     "base":     "#ffffff",
     "surface":  "#ffffff",
     "overlay":  "#eaeaea",
@@ -76,9 +76,9 @@ MONO: dict[str, str] = {
 # ── Public API ───────────────────────────────────────────────────────────
 
 THEMES: dict[str, dict[str, str]] = {
-    "moon": MOON,
-    "dawn": DAWN,
-    "mono": MONO,
+    "dark": DARK,
+    "light": LIGHT,
+    "printable": PRINTABLE,
 }
 
 
@@ -86,7 +86,7 @@ def emit_css_variables(theme_name: str) -> str:
     """Return a CSS :root block with the given theme's colour variables.
 
     Args:
-        theme_name: One of "moon", "dawn", or "mono".
+        theme_name: One of "dark", "light", or "printable".
 
     Returns:
         A string like ``:root { --base: #232136; ... }`` ready to inject

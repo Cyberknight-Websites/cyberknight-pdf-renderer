@@ -248,6 +248,17 @@ tr:nth-child(odd) td {
 
 /* ── Images ───────────────────────────────────────────────────────────── */
 
+{% if theme_name == "printable" %}
+img {
+    max-width: 100%;
+    height: auto;
+    max-height: 300pt;
+    border-radius: 4pt;
+    margin: 8pt 0;
+    display: block;
+    filter: grayscale(100%);
+}
+{% else %}
 img {
     max-width: 100%;
     height: auto;
@@ -256,6 +267,7 @@ img {
     margin: 8pt 0;
     display: block;
 }
+{% endif %}
 
 /* ── Lists ────────────────────────────────────────────────────────────── */
 
