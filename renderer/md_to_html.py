@@ -286,8 +286,29 @@ class _SectionHTMLRenderer:
 
 # ── Content wrapper ─────────────────────────────────────────────────────
 
+def _is_image_only_group(lines: list[str]) -> bool:
+    """Check if a group consists primarily of an image with optional caption.
+
+    Such groups are rendered bare (no .surface wrapper) to avoid large
+    empty bordered boxes when an image is the only content.
+    """
+    joined = "\n".join(lines).strip()
+    if not joined or "<img" not in joined:
+        return False
+
+    # Must not contain headings, code blocks, tables, lists, or blockquotes
+    if re.search(r'<(h3|pre|table|ul|ol|blockquote)\b', joined):
+        return False
+
+    # Strip tags and measure remaining text; more than ~400 chars of
+    # prose means it should stay in a surface box.
+    text_only = re.sub(r'<[^>]+>', '', joined).strip()
+    return len(text_only) <= 400
+
+
 def _wrap_surface_content(html: str) -> str:
-    """Wrap content into .surface divs; H3 headings start a new surface."""
+    """Wrap content into .surface divs; H3 headings start a new surface.
+    Image-only groups (with optional caption) are rendered bare."""
     # Protect multi-line block elements (pre, table, ul, ol, blockquote)
     # from being fragmented by the line-based grouping logic below.
     protected: dict[str, str] = {}
@@ -299,6 +320,16 @@ def _wrap_surface_content(html: str) -> str:
 
     html = re.sub(r'<(pre|table|ul|ol|blockquote)\b.*?</\1>', _protect, html, flags=re.DOTALL)
 
+    def flush_group(group: list[str]) -> None:
+        if not group:
+            return
+        if _is_image_only_group(group):
+            result.append("\n".join(group))
+        else:
+            result.append(
+                '<div class="surface">\n' + "\n".join(group) + "\n</div>"
+            )
+
     lines = html.strip().split("\n")
     result: list[str] = []
     current_group: list[str] = []
@@ -309,19 +340,13 @@ def _wrap_surface_content(html: str) -> str:
             continue
 
         if stripped.startswith("<h3"):
-            if current_group:
-                result.append(
-                    '<div class="surface">\n' + "\n".join(current_group) + "\n</div>"
-                )
-                current_group = []
+            flush_group(current_group)
+            current_group = []
             current_group.append(stripped)
         else:
             current_group.append(stripped)
 
-    if current_group:
-        result.append(
-            '<div class="surface">\n' + "\n".join(current_group) + "\n</div>"
-        )
+    flush_group(current_group)
 
     result_str = "\n".join(result)
     for placeholder, original in protected.items():

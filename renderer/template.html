@@ -276,7 +276,7 @@ img {
     height: auto;
     max-height: 300pt;
     border-radius: 4pt;
-    margin: 8pt 0;
+    margin: 8pt auto;
     display: block;
     filter: grayscale(100%);
 }
@@ -286,8 +286,13 @@ img {
     height: auto;
     max-height: 300pt;
     border-radius: 4pt;
-    margin: 8pt 0;
+    margin: 8pt auto;
     display: block;
+}
+
+/* Tighten the visual gap when a bare image sits directly above a .surface box */
+img + .surface {
+    margin-top: 0;
 }
 {% endif %}
 
