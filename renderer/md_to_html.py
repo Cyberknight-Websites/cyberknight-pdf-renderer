@@ -126,9 +126,14 @@ class _SectionHTMLRenderer:
             if raw.strip().startswith(_DIRECTIVE_TABLE):
                 return _process_table_directive(raw)
             text = self._render_inlines(children)
-            if text.strip():
-                return f"<p>{text}</p>"
-            return ""
+            if not text.strip():
+                return ""
+            # Render bare images without <p> wrapper so CSS sibling
+            # selectors (img + .surface) actually match in the PDF.
+            stripped = text.strip()
+            if stripped.startswith("<img") and stripped.endswith(">"):
+                return stripped
+            return f"<p>{text}</p>"
 
         elif t == "block_code":
             code = token.get("raw", "")
